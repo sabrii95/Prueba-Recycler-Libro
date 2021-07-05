@@ -1,5 +1,6 @@
 package com.example.recyclerlibro
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
 
-class ItemAdapter(items: List<Item>, item: ItemClickListener): RecyclerView.Adapter<ItemAdapter.ViewHolder>(), View.OnClickListener {
-    val items : List<Item> = items
-    val clickListener = item
+class ItemAdapter(private val items: List<Item>, item: ItemClickListener): RecyclerView.Adapter<ItemAdapter.ViewHolder>(), View.OnClickListener {
+    private val clickListener = item
 
 
 
@@ -29,29 +29,31 @@ class ItemAdapter(items: List<Item>, item: ItemClickListener): RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.elemento.setText(items.get(position).name)
+        holder.elemento.text = items[position].name
         Picasso.get()
-            .load(items.get(position).url)
-            .placeholder(R.drawable.content)
+            .load(items[position].url)
+            .error(R.drawable.missingbook)
+            .placeholder(R.drawable.missingbook)
             .into(holder.img)
 
-        holder.cardItem.setOnClickListener{clickListener.onItemClick(items.get(position))}
+        holder.cardItem.setOnClickListener{clickListener.onItemClick(items[position])}
     }
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val img =view.findViewById<ImageView>(R.id.posterImageView)
-        val elemento = view.findViewById<TextView>(R.id.nameTextView2)
-        val cardItem = view.findViewById<CardView>(R.id.cardItem)
+        val img: ImageView =view.findViewById(R.id.posterImageView)
+        val elemento: TextView = view.findViewById(R.id.nameTextView2)
+        val cardItem: CardView = view.findViewById(R.id.cardItem)
 
     }
     interface ItemClickListener {
         fun onItemClick(element:Item)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onClick(v: View?) {
         if (v != null) {
-            v.findViewById<TextView>(R.id.nameTextView2).setText("not found")
+            v.findViewById<TextView>(R.id.nameTextView2).text = "not found"
         }
     }
 

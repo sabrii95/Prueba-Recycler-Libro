@@ -1,5 +1,6 @@
 package com.example.recyclerlibro
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,10 @@ import com.squareup.picasso.Picasso
 
 
 class SecondFragment : Fragment() {
+    private var name:String=""
     private var url:String =""
+    private  var author:String=""
+    private var des:String=""
 
     private var _binding: FragmentSecondBinding? = null
 
@@ -18,22 +22,26 @@ class SecondFragment : Fragment() {
 
     override  fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-        val args = arguments
-        val index = args?.getString("url").toString()
-        println("argumentosURL: $args")
+        name = arguments?.getString("name").toString()
         url = arguments?.getString("url").toString()
+        author = arguments?.getString("author").toString()
+        des = arguments?.getString("des").toString()
+
     }
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
-
+        binding.nameTextView.text = name
+        binding.authorTextView.text = "author: $author"
+        binding.descriptionTextView.text = des
         Picasso.get()
             .load(url)
-            .placeholder(R.drawable.content)
-            .error(R.drawable.content)
+            .placeholder(R.drawable.missingbook)
+            .error(R.drawable.missingbook)
             .into(binding.vistaImageView)
         return binding.root
     }

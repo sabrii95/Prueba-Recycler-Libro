@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,8 +17,6 @@ class FirstFragment : Fragment(), ItemAdapter.ItemClickListener  {
     private lateinit  var lista : List<Item>
 
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -27,7 +24,7 @@ class FirstFragment : Fragment(), ItemAdapter.ItemClickListener  {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
-        recycler= binding.recycler
+        recycler= binding.mRecyclerView
         recycler.layoutManager = LinearLayoutManager(context)
         llenarLista()
         val adapter = ItemAdapter(this.lista, this)
@@ -55,19 +52,14 @@ class FirstFragment : Fragment(), ItemAdapter.ItemClickListener  {
 
 
     override fun onItemClick(element: Item) {
-        val fragment = SecondFragment()
         val arg = Bundle().apply {
                 putString("name",element.name)
                 putString("author",element.author)
                 putString("des",element.description)
                 putString("url",element.url)
             }
-        fragment.arguments = arg
-        this.parentFragmentManager
-            .beginTransaction()
-            .replace(R.id.SecondFragment,fragment)
-            .commit()
-        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+
+        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment,arg)
 
     }
 }
